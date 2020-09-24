@@ -10,8 +10,10 @@ var win_color = "#22ddaa",
 	square_color = "#999999",
 	highlight_color = "#bbbbbb";
 var data_log =[]
-var level = 50
-var category = 2
+var level = 0;
+var category = 0;
+var maxLevel = 199;
+var nCategories = 10;
 var lastresult = "win"
 var dismissed_click_prompt = false;
 
@@ -228,9 +230,15 @@ function start_game(game_info) {
 	if (game_info.num == 0 && game_info.startLevel > 0) {
 		level = game_info.startLevel;
 	} else {
-		level = (category-1)*40 + Math.floor(Math.random()*40)
+		let ratio = (category - 1 + Math.random()) / nCategories;
+		level = Math.floor(ratio * maxLevel);
 	}
-	log_data({"event_type": "start game", "event_info": {"game_num": game_info.num, "is_practice": game_info.practice, "level": level}})
+	log_data({"event_type": "start game", "event_info": {
+		"game_num": game_info.num,
+		"is_practice": game_info.practice,
+		"category": category,
+		"level": level
+	}});
 	create_board()
 	if(user_color==0)
 		user_move(game_info)
@@ -239,15 +247,16 @@ function start_game(game_info) {
 }
 
 function adjust_level(result){
-	old_level = level
-	if(result=='win'){
-		if(lastresult=='win'){
-			category = Math.min(category+1,5)
+	old_level = level;
+	if (result == 'win') {
+		if (lastresult == 'win') {
+			category = Math.min(category + 1, nCategories);
 		}
 	}
-	if(result=='opponent win')
-		category=Math.max(category-1,1)
-	lastresult = result	
+	if (result == 'opponent win') {
+		category = Math.max(category - 1, 1);
+	}
+	lastresult = result;
 	log_data({"event_type": "adjust level", "event_info" : {"category" : category}})
 }
 
@@ -419,7 +428,7 @@ function initialize_task(_num_games) {
 		},
 		nextButton: "Start"
 	}, {
-		text: "Thank you for playing! Almost done, please click next to answer a few questions.",
+		text: "Well done! Please click next to go to the next part.",
 	}]
 }
 

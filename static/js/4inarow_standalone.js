@@ -26,6 +26,6 @@ function log_data(data){
 $(document).ready(function(){
 	user_credentials = "test"
 	//enter_credentials(start_game)
-	initialize_task(10);
+	initialize_task(20);
 	start_experiment();
 });
