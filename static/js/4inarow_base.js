@@ -428,7 +428,8 @@ function initialize_task(_num_games) {
 		},
 		nextButton: "Start"
 	}, {
-		text: "Well done! Please click next to go to the next part.",
+		text: "Well done! The next part uses audio so <span style='color: #ff0000; font-weight: bold;'>please turn on your sound now</span>. Then click the button to go to the next part.",
+		nextButton: "Sound is on"
 	}]
 }
 
