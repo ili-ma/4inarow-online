@@ -235,6 +235,7 @@ function start_game(game_info) {
 	}
 	log_data({"event_type": "start game", "event_info": {
 		"game_num": game_info.num,
+		"game_total": game_info.amount,
 		"is_practice": game_info.practice,
 		"category": category,
 		"level": level
