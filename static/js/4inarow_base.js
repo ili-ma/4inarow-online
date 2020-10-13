@@ -257,7 +257,7 @@ function adjust_level(result){
 		category = Math.max(category - 1, 1);
 	}
 	lastresult = result;
-	log_data({"event_type": "adjust level", "event_info" : {"category" : category}})
+	log_data({"event_type": "adjust level", "event_info" : {"category" : category, "maxCategory": nCategories}})
 }
 
 function end_game(game_info, result) {
