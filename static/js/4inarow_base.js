@@ -13,7 +13,7 @@ var data_log =[]
 var level = 0;
 var category = 0;
 var maxLevel = 199;
-var nCategories = 10;
+var nCategories = 20;
 var lastresult = "win"
 var dismissed_click_prompt = false;
 
