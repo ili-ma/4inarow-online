@@ -14,8 +14,10 @@ var level = 0;
 var category = 0;
 var maxLevel = 199;
 var nCategories = 20;
-var lastresult = "win"
+var lastresult = "win";
+var _num_games = 35;
 var dismissed_click_prompt = false;
+var gameStartTime = Date.now();
 
 function goFullscreen() {
 	let element = document.body;
@@ -221,6 +223,7 @@ function make_opponent_move(game_info) {
 function start_game(game_info) {
 	if (!game_info.num) {
 		game_info.num = 0;
+		gameStartTime = Date.now();
 		if (game_info.startCategory) category = game_info.startCategory;
 	}
 	$('#instructions').hide();
@@ -262,8 +265,23 @@ function adjust_level(result){
 }
 
 function end_game(game_info, result) {
-	log_data({"event_type": "end game", "event_info" : {"game_num": game_info.num, "is_practice": game_info.practice, "result": result, "level": level}})
+	let current_minutes = (Date.now() - gameStartTime) / 60000;
+	log_data({"event_type": "end game", "event_info": {
+		"game_num": game_info.num,
+		"is_practice": game_info.practice,
+		"max_minutes": game_info.max_minutes,
+		"current_minutes": Math.round(current_minutes),
+		"result": result,
+		"level": level
+	}});
 	adjust_level(result)
+	if (current_minutes >= game_info.max_minutes) {
+		// If the game is taking too long then treat the current one as if it were the last
+		log_data({"event_type": "game timeout", "event_info": {
+			"current_minutes": current_minutes
+		}});
+		game_info.num = game_info.amount;
+	}
 	$("#nextgamebutton").show().css({"display" :"inline"}).off("click").on("click",function(){
 		$("#nextgamebutton").hide()
 		user_color = (user_color+1)%2
@@ -370,7 +388,7 @@ function perform_instruction() {
 	$('#nextbutton').text(nextText);
 }
 
-function initialize_task(_num_games) {
+function initialize_task() {
 	current_instruction_nr = 0;
 	user_color = 0
 	instructions = [{
@@ -426,6 +444,7 @@ function initialize_task(_num_games) {
 			amount: _num_games,
 			practice: false,
 			startCategory: 2,
+			max_minutes: 50.0
 		},
 		nextButton: "Start"
 	}, {
