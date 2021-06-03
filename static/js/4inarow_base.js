@@ -20,6 +20,7 @@ var dismissed_click_prompt = false;
 var gameStartTime = Date.now();
 
 function goFullscreen() {
+	if (typeof demo !== "undefined") return;
 	let element = document.body;
 	let requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
 
@@ -451,6 +452,17 @@ function initialize_task() {
 		text: "Well done! The next part uses audio so <span style='color: #ff0000; font-weight: bold;'>please turn on your sound now</span>. Then click the button to go to the next part.",
 		nextButton: "Sound is on"
 	}]
+	if (typeof demo !== "undefined") {
+		instructions = [{
+			game_info: {
+				amount: _num_games,
+				practice: false,
+				startCategory: 2,
+				max_minutes: 50.0
+			},
+			nextButton: "Start"
+		}];
+	}
 }
 
 function start_experiment() {
